@@ -21,6 +21,7 @@ const requestListener = function(req, res) {
 
   const endpoint = pathArray[0];
   const id = pathArray[1];
+  let curentIndex = -1;
 
 
 
@@ -95,6 +96,24 @@ const requestListener = function(req, res) {
 
           break;
         case Method.put:
+          if (!checkvalidityUIID(id)) {
+            res.writeHead(400);
+            res.end(JSON.stringify({error: `Person id = ${id} is not valid`}));
+            return;
+          }
+
+          curentIndex = -1;
+          for (let i = 0; i < persons.length; i++) {
+            if (persons[i].id === id) {
+              curentIndex = i;
+              break;
+            }
+          }
+          if (curentIndex === -1) {
+            res.writeHead(404);
+            res.end(JSON.stringify({error: `Person with id = "${id}" not found`}));
+            return;
+          }
           let bodyput = '';
 
           req.on('data', function (chunk) {
@@ -123,7 +142,7 @@ const requestListener = function(req, res) {
             return;
           }
 
-          let curentIndex = -1;
+          curentIndex = -1;
           for (let i = 0; i < persons.length; i++) {
             if (persons[i].id === id) {
               curentIndex = i;

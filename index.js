@@ -56,7 +56,6 @@ const requestListener = function(req, res) {
             if (id) {
               if (!checkvalidityUIID(id)) {
                 res.writeHead(400);
-                console.log(id);
                 res.end(JSON.stringify({error: `Person id = ${id} is not valid`}));
                 return;
               }
@@ -82,7 +81,6 @@ const requestListener = function(req, res) {
           req.on('end', function () {
             if(body) {
               const postPerson = JSON.parse(body);
-              console.log(postPerson);
               if (!checkRequiredField(postPerson)) {
                 res.writeHead(400);
                 res.end(JSON.stringify({error: `Required fields of person are not valid or non-exist`}));
@@ -119,9 +117,27 @@ const requestListener = function(req, res) {
 
           break;
         case Method.delete:
+          if (!checkvalidityUIID(id)) {
+            res.writeHead(400);
+            res.end(JSON.stringify({error: `Person id = ${id} is not valid`}));
+            return;
+          }
+
+          let curentIndex = -1;
+          for (let i = 0; i < persons.length; i++) {
+            if (persons[i].id === id) {
+              curentIndex = i;
+              break;
+            }
+          }
+          if (curentIndex === -1) {
+            res.writeHead(404);
+            res.end(JSON.stringify({error: `Person with id = "${id}" not found`}));
+            return;
+          }
           persons.splice(curentIndex, 1);
           res.writeHead(204);
-          res.end(JSON.stringify(putPerson));
+          res.end();
           break;
         default:
           break;

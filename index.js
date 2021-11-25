@@ -21,6 +21,9 @@ const requestListener = function(req, res) {
 
   const endpoint = pathArray[0];
   const id = pathArray[1];
+
+
+
   switch (endpoint) {
     case Person:
       // console.log("in case");
@@ -50,6 +53,21 @@ const requestListener = function(req, res) {
             res.writeHead(200);
             res.end(JSON.stringify(persons));
           } else {
+            if (id) {
+              if (!checkvalidityUIID(id)) {
+                res.writeHead(400);
+                console.log(id);
+                res.end(JSON.stringify({error: `Person id = ${id} is not valid`}));
+                return;
+              }
+            }
+            const currentPerson = persons.filter(person => person.id === id);
+
+            if (!currentPerson.length) {
+              res.writeHead(404);
+              res.end(JSON.stringify({error: `Person with id = "${id}" not found`}));
+              return;
+            }
             res.writeHead(200);
             res.end(JSON.stringify(currentPerson));
           }

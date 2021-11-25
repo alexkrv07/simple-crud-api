@@ -3,11 +3,8 @@ const { RequiredFildPerson } = require('./constants.js');
 
 function checkRequiredField(person) {
   const iscorrectName = checkNamePerson(person[RequiredFildPerson.name]);
-  console.log('name', iscorrectName);
   const iscorrectAge = checkAgePerson(person[RequiredFildPerson.age]);
-  console.log('age', iscorrectAge);
   const iscorrectHobbies = checkHobbiesPerson(person[RequiredFildPerson.hobbies]);
-  console.log('hobbi', iscorrectHobbies);
 
   return iscorrectName && iscorrectAge && iscorrectHobbies ;
 }
